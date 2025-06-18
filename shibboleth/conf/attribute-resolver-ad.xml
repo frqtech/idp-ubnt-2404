@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AttributeResolver xmlns="urn:mace:shibboleth:2.0:resolver"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:mace:shibboleth:2.0:resolver http://shibboleth.net/schema/idp/shibboleth-attribute-resolver.xsd">
+
+    <!-- ========================================== -->
+    <!--      Attribute Definitions                 -->
+    <!-- ========================================== -->
+
+    <!-- uid -->
+    <AttributeDefinition id="uid" xsi:type="Simple">
+        <InputDataConnector ref="dcLDAP" attributeNames="sAMAccountName" />
+    </AttributeDefinition>
+
+    <!-- uidMD5 -->
+    <AttributeDefinition id="uidMD5" xsi:type="ScriptedAttribute" dependencyOnly="true">
+        <InputDataConnector ref="dcLDAP" attributeNames="%{idp.authn.LDAP.returnAttributes}" />
+        <Script>
+            <![CDATA[
+                uidMD5.getValues().clear();
+                logger = Java.type("org.slf4j.LoggerFactory").getLogger("net.shibboleth.idp.attribute");
+                if (typeof %{idp.authn.LDAP.returnAttributes} != "undefined" && %{idp.authn.LDAP.returnAttributes} != null ){
+                    localpart = org.apache.commons.codec.digest.DigestUtils.md5Hex(%{idp.authn.LDAP.returnAttributes}.getValues().get(0));
+                    uidMD5.getValues().add(localpart);
+                    logger.info("%{idp.authn.LDAP.returnAttributes}: "+%{idp.authn.LDAP.returnAttributes}.getValues().get(0)+" md5: "+localpart);
+                }
+            ]]>
+        </Script>
+    </AttributeDefinition>
+
+    <!-- commonName -->
+    <AttributeDefinition id="cn" xsi:type="Simple">
+        <InputDataConnector ref="dcLDAP" attributeNames="cn" />
+    </AttributeDefinition>
+
+    <!-- displayName -->
+    <AttributeDefinition id="displayName" xsi:type="Template">
+        <InputDataConnector ref="dcLDAP" attributeNames="givenName sn" />
+        <Template>${givenName} ${sn}</Template>
+    </AttributeDefinition>
+
+    <!-- givenName -->
+    <AttributeDefinition id="givenName" xsi:type="Simple">
+        <InputDataConnector ref="dcLDAP" attributeNames="givenName" />
+    </AttributeDefinition>
+
+    <!-- surName -->
+    <AttributeDefinition id="sn" xsi:type="Simple">
+        <InputDataConnector ref="dcLDAP" attributeNames="sn" />
+    </AttributeDefinition>
+
+    <!-- mail -->
+    <AttributeDefinition id="mail" xsi:type="Simple">
+        <InputDataConnector ref="dcLDAP" attributeNames="mail" />
+    </AttributeDefinition>
+
+    <!-- eduPersonEntitlement -->
+    <AttributeDefinition id="eduPersonEntitlement" xsi:type="Simple">
+        <InputDataConnector ref="staticAttributes" attributeNames="eduPersonEntitlement" />
+    </AttributeDefinition>
+
+    <!-- eduPersonAssurance -->
+    <AttributeDefinition id="eduPersonAssurance" xsi:type="Simple">
+        <InputDataConnector ref="staticAttributes" attributeNames="eduPersonAssurance" />
+    </AttributeDefinition>
+
+    <!-- schacHomeOrganization -->
+    <AttributeDefinition id="schacHomeOrganization" xsi:type="Simple">
+        <InputDataConnector ref="staticAttributes" attributeNames="schacHomeOrganization" />
+    </AttributeDefinition>
+
+    <!-- schacHomeOrganizationType -->
+    <AttributeDefinition id="schacHomeOrganizationType" xsi:type="Simple">
+        <InputDataConnector ref="staticAttributes" attributeNames="schacHomeOrganizationType" />
+    </AttributeDefinition>
+
+    <!-- brPersonCPF -->
+    <!--
+    <AttributeDefinition id="brPersonCPF" xsi:type="Simple">
+        <InputDataConnector ref="dcLDAP" attributeNames="brPersonCPF" />
+    </AttributeDefinition>
+    -->
+
+    <!-- schacDateOfBirth -->
+    <!--
+    <AttributeDefinition id="schacDateOfBirth" xsi:type="Simple">
+        <InputDataConnector ref="dcLDAP" attributeNames="schacDateOfBirth" />
+    </AttributeDefinition>
+    -->
+
+    <!-- eduPersonPrincipalName -->
+    <AttributeDefinition id="eduPersonPrincipalName" xsi:type="Scoped" scope="%{idp.scope}">
+        <InputAttributeDefinition ref="uidMD5" />
+    </AttributeDefinition>
+
+    <!-- eduPersonUniqueId -->
+    <AttributeDefinition id="eduPersonUniqueId" xsi:type="Scoped" scope="%{idp.scope}">
+        <InputAttributeDefinition ref="uidMD5" />
+    </AttributeDefinition>
+
+    <!-- ImmutableID -->
+    <AttributeDefinition xsi:type="Simple" id="ImmutableID">
+        <InputDataConnector ref="dcLDAP" attributeNames="objectGUID"/>
+    </AttributeDefinition>
+
+    <!-- ========================================== -->
+    <!--      Data Connectors                       -->
+    <!-- ========================================== -->
+
+    <DataConnector id="dcLDAP" xsi:type="LDAPDirectory" ldapURL="%{idp.attribute.resolver.LDAP.ldapURL}" baseDN="%{idp.attribute.resolver.LDAP.baseDN}" principal="%{idp.attribute.resolver.LDAP.bindDN}" principalCredential="%{idp.attribute.resolver.LDAP.bindDNCredential}" useStartTLS="%{idp.attribute.resolver.LDAP.useStartTLS:true}" noResultIsError="%{idp.attribute.resolver.LDAP.noResultsIsError:false}" multipleResultsIsError="%{idp.attribute.resolver.LDAP.multipleResultsIsError:true}">
+        <FilterTemplate>
+            <![CDATA[
+                %{idp.attribute.resolver.LDAP.searchFilter}
+            ]]>
+        </FilterTemplate>
+        <ReturnAttributes>%{idp.authn.LDAP.returnAttributes} mail cn givenName sn objectGUID</ReturnAttributes>
+        <BinaryAttributes>objectGUID</BinaryAttributes>
+    </DataConnector>
+
+    <DataConnector id="staticAttributes" xsi:type="Static">
+        <Attribute id="eduPersonEntitlement">
+            <Value>urn:mace:rediris.es:entitlement:wiki:tfemc2</Value>
+        </Attribute>
+        <Attribute id="eduPersonAssurance">
+            <Value>https://refeds.org/assurance</Value>
+            <Value>https://refeds.org/assurance/version/2</Value>
+            <Value>https://refeds.org/assurance/IAP/low</Value>
+            <Value>https://refeds.org/assurance/IAP/medium</Value>
+            <Value>https://refeds.org/assurance/ID/unique</Value>
+            <Value>https://refeds.org/assurance/profile/cappuccino</Value>
+        </Attribute>
+        <Attribute id="schacHomeOrganization">
+                <Value>%{idp.scope}</Value>
+        </Attribute>
+        <Attribute id="schacHomeOrganizationType">
+                <Value>urn:schac:homeOrganizationType:br:university</Value>
+        </Attribute>
+    </DataConnector>
+
+</AttributeResolver>
