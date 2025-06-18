@@ -224,7 +224,8 @@ EOF
     java -jar ${JETTY_HOME}/start.jar --create-startd
     wget ${REPOSITORY}/jetty/idp.mod -O ${JETTY_HOME}/modules/idp.mod
     wget ${REPOSITORY}/jetty/idp.ini -O ${JETTY_BASE}/start.d/idp.ini
-    java -jar ${JETTY_HOME}/start.jar --add-modules=idp
+    wget ${REPOSITORY}/jetty/forwarded.ini -O ${JETTY_BASE}/start.d/forwarded.ini
+    java -jar ${JETTY_HOME}/start.jar --add-modules=idp,forwarded
     mkdir ${JETTY_BASE}/{tmp,logs,webapps}
 
     mkdir /var/log/jetty
@@ -672,7 +673,7 @@ EOF
     cat > /opt/jetty-base/webapps/idp.xml <<-EOF
 <?xml version="1.0"?>
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
-<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+<Configure class="org.eclipse.jetty.ee9.webapp.WebAppContext">
   <Set name="war">${SHIBDIR}/war/idp.war</Set>
   <Set name="contextPath">/idp</Set>
   <Set name="extractWAR">false</Set>

@@ -13,6 +13,3 @@ ee9-plus
 resources
 server
 ee9-servlets
-
-[files]
-/opt/jetty-base/tmp/
