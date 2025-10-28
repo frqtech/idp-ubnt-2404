@@ -91,7 +91,35 @@
 
     </AttributeFilterPolicy>
 
-    <AttributeFilterPolicy id="releaseEduGAIN">
+    <AttributeFilterPolicy id="releaseToMFA">
+
+        <PolicyRequirementRule xsi:type="OR">
+            <Rule value="https://HN.HN_DOMAIN/mfa/saml2/service-provider-metadata/dashboard" xsi:type="Requester" />
+        </PolicyRequirementRule>
+
+        <AttributeRule attributeID="displayName">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonPrincipalName">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+        <AttributeRule attributeID="ImmutableID">
+            <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="mail">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+        <AttributeRule attributeID="uid">
+            <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+
+    </AttributeFilterPolicy>
+
+    <AttributeFilterPolicy id="releaseToEduGAIN">
 
         <PolicyRequirementRule xsi:type="OR">
             <Rule value="https://sp.rnp.br/aacli" xsi:type="Requester" />

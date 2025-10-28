@@ -365,6 +365,12 @@ EOF
     wget ${REPOSITORY}/shibboleth/conf/attributes/schac.xml -O ${SHIBDIR}/conf/attributes/schac.xml
     wget ${REPOSITORY}/shibboleth/conf/attributes/custom/ImmutableID.properties -O ${SHIBDIR}/conf/attributes/custom/ImmutableID.properties
 
+    echo "INFO - Ajustando attribute-filter" | tee -a ${F_LOG}
+    ATTRIBUTE_CONFIG="${SHIBDIR}/conf/attribute-filter.xml"
+    VALOR_ORIGINAL="https:\/\/HN.HN_DOMAIN\/mfa\/saml2\/service-provider-metadata\/dashboard"
+    VALOR_SUBSTITUIR="https:\/\/${HN}.${HN_DOMAIN}\/sp\/saml2\/service-provider-metadata\/dashboard"
+    sed -i "s/$VALOR_ORIGINAL/$VALOR_SUBSTITUIR/" ${ATTRIBUTE_CONFIG}
+
     echo "INFO - Configurando ldap.properties" | tee -a ${F_LOG}
     echo "" | tee -a ${F_LOG}
     cat > ${SHIBDIR}/conf/ldap.properties <<-EOF
