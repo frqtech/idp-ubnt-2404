@@ -98,6 +98,34 @@
         <InputAttributeDefinition ref="uidMD5" />
     </AttributeDefinition>
 
+    <!-- brEduAffiliationType -->
+    <!--
+    <AttributeDefinition id="brEduAffiliationType" xsi:type="Simple">
+        <InputDataConnector ref="dcLDAP" attributeNames="extensionAttributeX" />
+    </AttributeDefinition>
+    -->
+
+    <!-- eduPersonAffiliation -->
+    <!--
+    <AttributeDefinition id="eduPersonAffiliation" xsi:type="Mapped">
+        <InputAttributeDefinition ref="brEduAffiliationType" />
+        <DefaultValue passThru="true" />
+        <ValueMap>
+            <ReturnValue>affiliate</ReturnValue>
+            <SourceValue>other</SourceValue>
+            <SourceValue>position</SourceValue>
+            <SourceValue>scholarshipAwardee</SourceValue>
+        </ValueMap>
+    </AttributeDefinition>
+    -->
+
+    <!-- eduPersonScopedAffiliation -->
+    <!--
+    <AttributeDefinition id="eduPersonScopedAffiliation" xsi:type="Scoped" scope="%{idp.scope}">
+        <InputAttributeDefinition ref="eduPersonAffiliation" />
+    </AttributeDefinition>
+    -->
+
     <!-- ImmutableID -->
     <AttributeDefinition xsi:type="Simple" id="ImmutableID">
         <InputDataConnector ref="dcLDAP" attributeNames="objectGUID"/>
@@ -115,6 +143,10 @@
         </FilterTemplate>
         <ReturnAttributes>%{idp.authn.LDAP.returnAttributes} mail cn givenName sn objectGUID</ReturnAttributes>
         <BinaryAttributes>objectGUID</BinaryAttributes>
+    </DataConnector>
+
+    <DataConnector id="ComputedIDConnector" xsi:type="ComputedId" generatedAttributeID="ComputedID" salt="%{idp.cafe.computedIDsalt}">
+        <InputDataConnector ref="dcLDAP" attributeNames="%{idp.authn.LDAP.returnAttributes}" />
     </DataConnector>
 
     <DataConnector id="staticAttributes" xsi:type="Static">

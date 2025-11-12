@@ -4,6 +4,16 @@
     xmlns="urn:mace:shibboleth:2.0:afp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
 
+    <AttributeFilterPolicy id="releaseToAnyone">
+
+        <PolicyRequirementRule xsi:type="ANY"/>
+
+        <AttributeRule attributeID="eduPersonTargetedID">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+    </AttributeFilterPolicy>
+
     <AttributeFilterPolicy id="releaseToChimarraoOrCafe">
 
         <PolicyRequirementRule xsi:type="OR">

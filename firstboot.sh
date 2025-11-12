@@ -117,6 +117,7 @@ function dump_vars {
     echo "MSG_URL_RECUPERACAO_SENHA = ${MSG_URL_RECUPERACAO_SENHA}" | tee -a ${F_LOG}            
     echo "URL_RECUPERACAO_SENHA     = ${URL_RECUPERACAO_SENHA}" | tee -a ${F_LOG}
     echo "" | tee -a ${F_LOG}
+    echo "COMPUTEDIDSALT            = ${COMPUTEDIDSALT}" | tee -a ${F_LOG}
     echo "PERSISTENTDIDSALT         = ${PERSISTENTDIDSALT}" | tee -a ${F_LOG}
     echo "FTICKSSALT                = ${FTICKSSALT}" | tee -a ${F_LOG}
     echo "" | tee -a ${F_LOG}
@@ -276,6 +277,10 @@ function install_shib {
         echo "ERRO: O arquivo ${SHIBTAROUT} não está integro." | tee -a ${F_LOG}
         echo "" | tee -a ${F_LOG}
         exit 1
+    fi
+
+    if [ -z ${COMPUTEDIDSALT} ] ; then
+        COMPUTEDIDSALT=`openssl rand -base64 32`
     fi
 
     if [ -z ${PERSISTENTDIDSALT} ] ; then
@@ -462,6 +467,7 @@ idp.attribute.resolver.LDAP.bindDNCredential = %{idp.authn.LDAP.bindDNCredential
 # Salt used to generate persistent/pairwise IDs, must be kept secret
 idp.persistentId.salt  = ${PERSISTENTDIDSALT}
 
+idp.cafe.computedIDsalt = ${COMPUTEDIDSALT}
 EOF
 
 #

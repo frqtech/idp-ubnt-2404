@@ -4,6 +4,16 @@
     xmlns="urn:mace:shibboleth:2.0:afp"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:mace:shibboleth:2.0:afp http://shibboleth.net/schema/idp/shibboleth-afp.xsd">
 
+    <AttributeFilterPolicy id="releaseToAnyone">
+
+        <PolicyRequirementRule xsi:type="ANY"/>
+
+        <AttributeRule attributeID="eduPersonTargetedID">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+    </AttributeFilterPolicy>
+
     <AttributeFilterPolicy id="releaseToChimarraoOrCafe">
 
         <PolicyRequirementRule xsi:type="OR">
@@ -39,6 +49,33 @@
         <AttributeRule attributeID="eduPersonEntitlement">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
+
+        <!--
+        <AttributeRule attributeID="brEduAffiliationType">
+            <PermitValueRule xsi:type="OR">
+                <Rule xsi:type="Value" value="student" />
+                <Rule xsi:type="Value" value="faculty" />
+                <Rule xsi:type="Value" value="employee" />
+                <Rule xsi:type="Value" value="alum" />
+                <Rule xsi:type="Value" value="other" />
+                <Rule xsi:type="Value" value="position" />
+                <Rule xsi:type="Value" value="scholarshipAwardee" />
+            </PermitValueRule>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonAffiliation">
+            <PermitValueRule xsi:type="OR">
+                <Rule xsi:type="Value" value="faculty" />
+                <Rule xsi:type="Value" value="student" />
+                <Rule xsi:type="Value" value="staff" />
+                <Rule xsi:type="Value" value="alum" />
+                <Rule xsi:type="Value" value="member" />
+                <Rule xsi:type="Value" value="affiliate" />
+                <Rule xsi:type="Value" value="employee" />
+                <Rule xsi:type="Value" value="library-walk-in" />
+            </PermitValueRule>
+        </AttributeRule>
+        -->
 
         <AttributeRule attributeID="ImmutableID">
             <PermitValueRule xsi:type="ANY"/>
@@ -76,6 +113,8 @@
             <Rule value="https://HN.HN_DOMAIN/mfa/saml2/service-provider-metadata/dashboard" xsi:type="Requester" />
         </PolicyRequirementRule>
 
+        <PolicyRequirementRule xsi:type="Requester" value="https://HN.HN_DOMAIN/mfa/saml2/service-provider-metadata/dashboard" />
+
         <AttributeRule attributeID="displayName">
             <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
@@ -104,6 +143,25 @@
             <Rule value="https://sp.rnp.br/aacli" xsi:type="Requester" />
             <Rule groupID="urn:mace:switch.ch:SWITCHaai:interfederation" xsi:type="InEntityGroup" />
         </PolicyRequirementRule>
+
+        <!--
+        <AttributeRule attributeID="eduPersonAffiliation">
+            <PermitValueRule xsi:type="OR">
+                <Rule xsi:type="Value" value="faculty" />
+                <Rule xsi:type="Value" value="student" />
+                <Rule xsi:type="Value" value="staff" />
+                <Rule xsi:type="Value" value="alum" />
+                <Rule xsi:type="Value" value="member" />
+                <Rule xsi:type="Value" value="affiliate" />
+                <Rule xsi:type="Value" value="employee" />
+                <Rule xsi:type="Value" value="library-walk-in" />
+            </PermitValueRule>
+        </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonScopedAffiliation">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>  
+        -->
 
         <AttributeRule attributeID="eduPersonPrincipalName">
             <PermitValueRule xsi:type="ANY" />
