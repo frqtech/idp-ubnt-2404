@@ -75,8 +75,20 @@
             </PermitValueRule>
         </AttributeRule>
 
+        <AttributeRule attributeID="eduPersonScopedAffiliation">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
         <AttributeRule attributeID="ImmutableID">
             <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="schacHomeOrganization">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+        <AttributeRule attributeID="schacHomeOrganizationType">
+            <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
     </AttributeFilterPolicy>

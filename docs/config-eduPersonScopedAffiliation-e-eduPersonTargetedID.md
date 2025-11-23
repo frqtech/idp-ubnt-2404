@@ -44,11 +44,12 @@ Após configurada a geração, é necessário liberar o atributo para os provedo
 
 O atributo `eduPersonTargetedID` consiste em um identificador único, opaco e não reutilizável* utilizado para representar de forma persistente e anônima o relacionamento entre um usuário e um provedor de serviço.
 
-A configuração é composta por três etapas principais:
+A configuração é composta por quatro etapas principais:
 
-1. Criação de um *salt* para geração do identificador.  
-2. Definição e vinculação do atributo no `attribute-resolver.xml`.  
-3. Liberação do atributo no `attribute-filter.xml`.
+1. Criação de um *salt* para geração do identificador.
+2. Definição das propriedades do atributo.
+3. Definição e vinculação do atributo no `attribute-resolver.xml`.  
+4. Liberação do atributo no `attribute-filter.xml`.
 
 ### 3.1 Criação do *salt*
 
@@ -64,8 +65,24 @@ Em seguida, insira o valor gerado ao final do arquivo
 ```
 idp.cafe.computedIDsalt = ResultadoDoComando
 ```
+### 3.2. Definição das propriedades do atributo
 
-### 3.2 Definição e vinculação do atributo
+O atributo `eduPersonTargetedID` não está mais presente no schema eduPerson. Por esse motivo, suas propriedades precisam ser definidas manualmente no Shibboleth IDP.
+
+Crie o arquivo `/opt/shibboleth-idp/conf/attributes/custom/eduPersonTargetedID.properties` e adicione o conteúdo abaixo:
+
+```xml
+# eduPersonTargetedID
+
+id=eduPersonTargetedID
+transcoder=SAML2XMLObjectTranscoder
+saml2.name=urn:oid:1.3.6.1.4.1.5923.1.1.1.10
+displayName.en=Opaque per-service identifier eduPersonTargetedID
+description.en=Opaque per-service identifier eduPersonTargetedID
+saml1.encodeType=falses
+```
+
+### 3.3 Definição e vinculação do atributo
 
 O próximo passo consiste na criação da definição do atributo e de seu respectivo *data connector*. Para isso, edite o arquivo  
 `/opt/shibboleth-idp/conf/attribute-resolver.xml` e faça as seguintes alterações.
@@ -94,7 +111,7 @@ Adicione este bloco antes do `DataConnector` cujo `id` é `staticAttributes`.
 </DataConnector>
 ```
 
-### 3.3 Liberação do atributo
+### 3.4 Liberação do atributo
 
 Para disponibilizar o atributo aos provedores de serviço, é necessário criar uma nova política de liberação. Edite o arquivo  
 `/opt/shibboleth-idp/conf/attribute-filter.xml` e adicione o bloco a seguir antes do `AttributeFilterPolicy` cujo `id` é `releaseToChimarraoOrCafe`.

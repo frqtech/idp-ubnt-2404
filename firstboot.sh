@@ -369,6 +369,7 @@ EOF
     wget ${REPOSITORY}/shibboleth/conf/attributes/default-rules.xml -O ${SHIBDIR}/conf/attributes/default-rules.xml
     wget ${REPOSITORY}/shibboleth/conf/attributes/schac.xml -O ${SHIBDIR}/conf/attributes/schac.xml
     wget ${REPOSITORY}/shibboleth/conf/attributes/custom/ImmutableID.properties -O ${SHIBDIR}/conf/attributes/custom/ImmutableID.properties
+    wget ${REPOSITORY}/shibboleth/conf/attributes/custom/eduPersonTargetedID.properties -O ${SHIBDIR}/conf/attributes/custom/eduPersonTargetedID.properties
 
     echo "INFO - Ajustando attribute-filter" | tee -a ${F_LOG}
     ATTRIBUTE_CONFIG="${SHIBDIR}/conf/attribute-filter.xml"

@@ -121,6 +121,11 @@
         <InputDataConnector ref="dcLDAP" attributeNames="entryUUID"/>
     </AttributeDefinition>
 
+    <!-- CAFe - eduPersonTargetedID -->
+    <AttributeDefinition id="eduPersonTargetedID" xsi:type="SAML2NameID" nameIdFormat="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">
+        <InputDataConnector ref="ComputedIDConnector" attributeNames="ComputedID" />
+    </AttributeDefinition>
+
     <!-- ========================================== -->
     <!--      Data Connectors                       -->
     <!-- ========================================== -->
@@ -143,8 +148,8 @@
         <ReturnAttributes>brEduAffiliationType</ReturnAttributes>
     </DataConnector>
 
-    <DataConnector id="ComputedIDConnector" xsi:type="ComputedId" generatedAttributeID="ComputedID" salt="%{idp.cafe.computedIDsalt}">
-        <InputDataConnector ref="dcLDAP" attributeNames="%{idp.authn.LDAP.returnAttributes}" />
+    <DataConnector id="ComputedIDConnector" xsi:type="ComputedId" generatedAttributeID="ComputedID" salt="%{idp.cafe.computedIDsalt}" encoding="%{idp.persistentId.encoding:BASE32}">
+        <InputDataConnector ref="dcLDAP" attributeNames="%{idp.persistentId.sourceAttribute}" />
     </DataConnector>
 
     <DataConnector id="staticAttributes" xsi:type="Static">

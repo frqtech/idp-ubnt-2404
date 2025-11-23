@@ -75,10 +75,22 @@
                 <Rule xsi:type="Value" value="library-walk-in" />
             </PermitValueRule>
         </AttributeRule>
+
+        <AttributeRule attributeID="eduPersonScopedAffiliation">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
         -->
 
         <AttributeRule attributeID="ImmutableID">
             <PermitValueRule xsi:type="ANY"/>
+        </AttributeRule>
+
+        <AttributeRule attributeID="schacHomeOrganization">
+            <PermitValueRule xsi:type="ANY" />
+        </AttributeRule>
+
+        <AttributeRule attributeID="schacHomeOrganizationType">
+            <PermitValueRule xsi:type="ANY" />
         </AttributeRule>
 
     </AttributeFilterPolicy>
@@ -160,7 +172,7 @@
 
         <AttributeRule attributeID="eduPersonScopedAffiliation">
             <PermitValueRule xsi:type="ANY" />
-        </AttributeRule>  
+        </AttributeRule>
         -->
 
         <AttributeRule attributeID="eduPersonPrincipalName">
